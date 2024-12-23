@@ -3,22 +3,27 @@ import os
 
 from dotenv import load_dotenv
 from crewai import Agent, Task, Crew, Process
-from crewai_tools import ScrapeWebsiteTool, SerperDevTool, YoutubeVideoSearchTool
+from crewai_tools import YoutubeVideoSearchTool
 
 warnings.filterwarnings('ignore')
 os.environ['PIP_ROOT_USER_ACTION'] = 'ignore'
+os.environ['CREWAI_STORAGE_DIR'] = '/Users/bytedance/PycharmProjects/crew_agent/src/crew_agent/agents/memory/.'
+
+import ssl
+
+ssl._create_default_https_context = ssl._create_unverified_context
 
 # os.environ["OPENAI_API_KEY"]
 # os.environ['OPENAI_API_BASE']
 load_dotenv(dotenv_path="../../../.env")
 
 # Create a search tool
-search_tool = YoutubeVideoSearchTool(youtube_video_url='https://www.youtube.com/watch?v=wjZofJX0v4M')
+search_tool = YoutubeVideoSearchTool(youtube_video_url='https://www.youtube.com/watch?v=F8NKVhkZZWI')
 
 # Define the research agent
 researcher = Agent(
     role='Video Content Researcher',
-    goal='Extract key insights from YouTube videos on AI advancements',
+    goal='Extract key insights from YouTube videos on AI advancements, must use english answer',
     backstory=(
         "You are a skilled researcher who excels at extracting valuable insights from video content. "
         "You focus on gathering accurate and relevant information from YouTube to support your team."
@@ -44,20 +49,20 @@ writer = Agent(
 # Create the research task
 research_task = Task(
     description=(
-        "Research and extract key insights from YouTube regarding Educative. "
-        "Compile your findings in a detailed summary."
+        "Research and extract key insights from YouTube regarding AI Agent. "
+        "Compile your findings in a detailed summary, must use english answer"
     ),
-    expected_output='A summary of the key insights from YouTube',
+    expected_output='A summary of the key insights from YouTube, must use english answer.',
     agent=researcher
 )
 
 # Create the writing task
 writing_task = Task(
     description=(
-        "Using the summary provided by the researcher, write a compelling article on what is Educative. "
-        "Ensure the article is well-structured and engaging for a tech-savvy audience. must use chinese."
+        "Using the summary provided by the researcher, write a compelling article on what is AI Agent. "
+        "Ensure the article is issuewell-structured and engaging for a tech-savvy audience. must use chinese answer."
     ),
-    expected_output='A well-written article on Educative based on the YouTube video research.',
+    expected_output='A well-written article on AI Agent based on the YouTube video research.',
     agent=writer,
     human_input=True  # Allow for human feedback after the draft
 )
@@ -78,10 +83,10 @@ result = crew.kickoff()
 print("######################")
 print(result)
 
-from IPython.display import Markdown
-
-# Convert the CrewOutput object to a Markdown string
-result_markdown = result.raw
-
-# Display the result as Markdown
-Markdown(result_markdown)
+# from IPython.display import Markdown
+#
+# # Convert the CrewOutput object to a Markdown string
+# result_markdown = result.raw
+#
+# # Display the result as Markdown
+# Markdown(result_markdown)

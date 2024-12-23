@@ -97,7 +97,7 @@ crew = Crew(
 )
 
 research_inputs = {
-    'topic': 'The rise in global tempratures from 2018 onwards'
+    'topic': 'AI LangChain developmental'
 }
 
 # Kick off the crew
