@@ -24,10 +24,16 @@ search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
 
 ## call the gemini models
-gemini = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
-                                verbose=True,
-                                temperature=0.5,
-                                google_api_key=os.getenv("GOOGLE_API_KEY"))
+# gemini = ChatGoogleGenerativeAI(model="gemini-1.5-flash",
+#                                 verbose=True,
+#                                 temperature=0.5,
+#                                 google_api_key=os.getenv("GOOGLE_API_KEY"))
+
+gptMin = ChatOpenAI(model="gpt-4o-mini",
+                 verbose=True,
+                 temperature=0.5,
+                 openai_api_key=os.getenv("OPENAI_API_KEY"))
+
 # Initialize the GPT-4 model using ChatOpenAI
 gpt = ChatOpenAI(model="gpt-4o-2024-08-06",
                  verbose=True,
@@ -46,7 +52,7 @@ article_researcher = Agent(
         "the world."
     ),
     tools=[search_tool],
-    llm=gemini,
+    llm=gpt,
     allow_delegation=True
 
 )
@@ -63,7 +69,7 @@ article_writer = Agent(
         "discoveries to light in an accessible manner."
     ),
     tools=[search_tool],
-    llm=gpt,
+    llm=gptMin,
     allow_delegation=False
 )
 
