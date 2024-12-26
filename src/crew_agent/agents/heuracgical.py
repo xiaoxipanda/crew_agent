@@ -3,7 +3,7 @@ import os
 
 from dotenv import load_dotenv
 from IPython.display import Markdown
-from crewai import Agent, Task, Crew, Process
+from crewai import Agent, Task, Crew, Process, LLM
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
 from langchain_groq import ChatGroq
 
@@ -20,12 +20,20 @@ load_dotenv(dotenv_path="../../../.env")
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
 
-model = 'llama3-groq-70b-8192-tool-use-preview'
-llm = ChatGroq(
-    temperature=0,
-    groq_api_key=os.getenv('GROQ_API_KEY'),
-    model_name=model
-)
+# model = 'llama3-groq-70b-8192-tool-use-preview'
+# llm = ChatGroq(
+#     temperature=0,
+#     groq_api_key=os.getenv('GROQ_API_KEY'),
+#     model_name=model
+# )
+# os.environ['LITELLM_LOG'] = 'DEBUG'
+# llm = LLM(model="groq/llama3-groq-8b-8192-tool-use-preview")
+
+from langchain_openai import ChatOpenAI
+llm=ChatOpenAI(model="gpt-4o-2024-08-06",
+               verbose=True,
+               temperature=0,
+               openai_api_key=os.getenv("OPENAI_API_KEY"))
 
 research_analyst_agent = Agent(
     role="Research Analyst",
@@ -34,7 +42,7 @@ research_analyst_agent = Agent(
     verbose=True,
     allow_delegation=True,
     tools=[scrape_tool, search_tool],
-    llm=llm
+    llm=llm,
 )
 
 report_writer_agent = Agent(
@@ -43,7 +51,7 @@ report_writer_agent = Agent(
     backstory="You are skilled at transforming complex information into clear, concise, and informative reports.",
     verbose=True,
     allow_delegation=True,
-    llm=llm
+    llm=llm,
 )
 
 report_editor_agent = Agent(
@@ -51,7 +59,7 @@ report_editor_agent = Agent(
     goal="Review and refine research reports to ensure clarity, accuracy, and adherence to standards.",
     backstory="With a keen eye for detail and a strong background in report editing, this agent ensures that research reports are polished, coherent, and meet high-quality standards. Skilled in revising content for clarity and consistency, the Report Editor Agent plays a critical role in finalizing research outputs.",
     verbose=True,
-    llm=llm
+    llm=llm,
 )
 
 # Define tasks
@@ -107,7 +115,7 @@ research_crew = Crew(
 
 # Define the input for the research topic
 research_inputs = {
-    'topic': 'The impact of AI on modern healthcare systems'
+    'topic': 'AI Agent Development'
 }
 
 # Kickoff the project with the specified topic

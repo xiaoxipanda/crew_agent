@@ -16,7 +16,7 @@ load_dotenv(dotenv_path="../../../.env")
 prompt = hub.pull("hwchase17/react")
 
 # Define the tools the agent will use
-tools = [TavilySearchResults(max_results=1)]
+tools = [TavilySearchResults(max_results=3)]
 
 # Choose the LLM (Large Language Model) to use
 llm = OpenAI()

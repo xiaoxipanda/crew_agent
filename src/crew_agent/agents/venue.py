@@ -42,7 +42,7 @@ venue_quality_assurance_agent = Agent(
 
 find_venue_task = Task(
     description=(
-        "Conduct a thorough search to find the best venue for the upcoming conference in Las Vegas, USA. "
+        "Conduct a thorough search to find the best venue for the upcoming conference in Shenzhen, China. "
         "Consider factors such as capacity, location, amenities, and pricing. "
         "Use online resources and databases to gather comprehensive information."
     ),
