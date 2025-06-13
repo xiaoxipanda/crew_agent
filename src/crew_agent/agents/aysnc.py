@@ -2,6 +2,7 @@ import warnings
 import os
 
 from dotenv import load_dotenv
+import asyncio
 from crewai import Agent, Task, Crew, Process
 
 warnings.filterwarnings('ignore')
@@ -52,9 +53,13 @@ analysis_crew2 = Crew(
     tasks=[data_analysis_task2]
 )
 
-# result_1 = await analysis_crew1.kickoff_async(inputs={"ages": [25, 30, 35, 40, 45]})
-result_1 = analysis_crew1.kickoff_async(inputs={"ages": [25, 30, 35, 40, 45]})
-result_2 = analysis_crew2.kickoff(inputs={"ages": [20, 25, 30, 35, 40]})
+async def main() -> None:
+    result_1 = await analysis_crew1.kickoff_async(inputs={"ages": [25, 30, 35, 40, 45]})
+    result_2 = analysis_crew2.kickoff(inputs={"ages": [20, 25, 30, 35, 40]})
 
-print("Async Crew Thread Output:", result_1)
-print("Main Thread Output", result_2)
+    print("Async Crew Thread Output:", result_1)
+    print("Main Thread Output", result_2)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
